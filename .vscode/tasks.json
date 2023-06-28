@@ -9,7 +9,7 @@
                 "-g",
                 //"-O3",
                 // {
-                //     "value": "$(pkg-config ncursesw --cflags)",
+                //     "value": "$(pkg-config ncursesw --cflags).trim().split()",
                 //     "quoting": "weak"
                 // },
                 "-D_XOPEN_SOURCE=600",
@@ -18,7 +18,7 @@
                 "-I${workspaceFolder}/include",
                 "${workspaceFolder}/src/*.c",
                 // {
-                //     "value": "$(pkg-config ncursesw --libs)",
+                //     "value": "$(pkg-config ncursesw --libs).trim().split()",
                 //     "quoting": "weak"
                 // },
                 "-lncursesw",
