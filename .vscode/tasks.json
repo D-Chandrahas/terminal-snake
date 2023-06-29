@@ -8,26 +8,18 @@
                 "-fdiagnostics-color=always",
                 "-g",
                 //"-O3",
-                // {
-                //     "value": "$(pkg-config ncursesw --cflags).trim().split()",
-                //     "quoting": "weak"
-                // },
                 "-D_XOPEN_SOURCE=600",
                 "-D_POSIX_C_SOURCE=199506L",
                 "-IC:/msys64/mingw64/bin/../include/ncursesw",
                 "-I${workspaceFolder}/include",
                 "${workspaceFolder}/src/*.c",
-                // {
-                //     "value": "$(pkg-config ncursesw --libs).trim().split()",
-                //     "quoting": "weak"
-                // },
                 "-lncursesw",
                 "-lsystre",
                 "-ltre",
                 "-lintl",
                 "-liconv",
                 "-o",
-                "${workspaceFolder}/bin/hello_world.exe",
+                "${workspaceFolder}/bin/snake.exe",
             ],
             "options": {
                 "cwd": "${workspaceFolder}"
