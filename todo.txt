@@ -1,0 +1,13 @@
+getters and setters
+better arg names
+sync header file
+
+main loop
+    get input (handle no input)
+    check if snake ate food
+        increase snake length
+        new food
+    move snake in memory based on input(update x,y,heading etc)
+    check if snake should die
+    update screen
+
