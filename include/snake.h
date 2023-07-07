@@ -1,23 +1,11 @@
 #ifndef SNAKE_H
 #define SNAKE_H
 
-typedef unsigned short int usint;
-
-typedef struct Node Node;
+#include <stdbool.h>
+#include "my_types.h"
+#include "node.h"
 
 typedef struct Snake Snake;
-
-Node *Node_Allocate(void);
-
-Node *Node_Construct(Node *node_p, usint y, usint x, char heading, Node *prev_p, Node *next_p);
-
-Node *New_Node(usint y, usint x, char heading, Node *prev_p, Node *next_p);
-
-usint Node_GetFollowerY(const Node *followedNode_p, char relPos);
-
-usint Node_GetFollowerX(const Node *followedNode_p, char relPos);
-
-char Node_FollowerHeadingToRelPos(const Node *followedNode_p, char heading);
 
 Snake *Snake_Allocate(void);
 
