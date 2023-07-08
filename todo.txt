@@ -1,13 +1,17 @@
 getters and setters
 better arg names
 sync header file
+use enum for heading
+check values in setheading
+formatting of getters and setters
+destructors
 
 main loop
-    get input (handle no input)
-    check if snake ate food
+    get input (handle no input with nodelay())
+    check if snake ate food (without moving in memory)
         increase snake length
         new food
-    move snake in memory based on input(update x,y,heading etc)
-    check if snake should die
+    move snake in memory based on input(update x,y,heading etc)  <---\
+    check if snake should die                                    <---/
     update screen
 

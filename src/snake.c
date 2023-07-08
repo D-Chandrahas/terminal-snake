@@ -39,7 +39,7 @@ usint Snake_GetLength(const Snake *snake_p)
 {
 	if (snake_p == NULL)
 	{
-		return -1;
+		return 0;
 	}
 
 	return snake_p->len;
