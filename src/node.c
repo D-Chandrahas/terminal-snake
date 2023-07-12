@@ -25,11 +25,11 @@ Node *Node_Construct(Node *node_p, usint y, usint x, char heading, Node *prev_p,
 		return NULL;
 	}
 
-	node_p->y = y;
-	node_p->x = x;
-	node_p->heading = heading;
-	node_p->prev_p = prev_p;
-	node_p->next_p = next_p;
+	Node_SetY(node_p, y);
+	Node_SetX(node_p, x);
+	Node_SetHeading(node_p, heading);
+	Node_SetPrevNodePtr(node_p, prev_p);
+	Node_SetNextNodePtr(node_p, next_p);
 	return node_p;
 }
 
@@ -44,6 +44,12 @@ bool Node_Destruct(Node *node_p)
 	{
 		return false;
 	}
+
+	Node_SetY(node_p, -1);
+	Node_SetX(node_p, -1);
+	Node_SetHeading(node_p, '\0');
+	Node_SetPrevNodePtr(node_p, NULL);
+	Node_SetNextNodePtr(node_p, NULL);
 
 	return true;
 }

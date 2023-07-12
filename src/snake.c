@@ -24,9 +24,9 @@ Snake *Snake_Construct(Snake *snake_p)
 		return NULL;
 	}
 
-	snake_p->len = 0;
-	snake_p->head_p = NULL;
-	snake_p->tail_p = NULL;
+	Snake_SetLength(snake_p, 0);
+	Snake_SetHeadPtr(snake_p, NULL);
+	Snake_SetTailPtr(snake_p, NULL);
 	return snake_p;
 }
 
@@ -48,9 +48,13 @@ bool Snake_Destruct(Snake *snake_p)
 	for (usint i = Snake_GetLength(snake_p); i > 0; i--)
 	{
 		nodeToBeDeleted_p = nodeToBeDeletedNext_p;
-		nodeToBeDeletedNext_p = Node_GetPrevPtr(nodeToBeDeleted_p);
-		Node_Destruct(nodeToBeDeleted_p);
+		nodeToBeDeletedNext_p = Node_GetPrevNodePtr(nodeToBeDeleted_p);
+		Delete_Node(&nodeToBeDeleted_p);
 	}
+
+	Snake_SetLength(snake_p, 0);
+	Snake_SetHeadPtr(snake_p, NULL);
+	Snake_SetTailPtr(snake_p, NULL);
 
 	return true;
 }
