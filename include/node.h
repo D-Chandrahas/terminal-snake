@@ -12,6 +12,12 @@ Node *Node_Construct(Node *node_p, usint y, usint x, char heading, Node *prev_p,
 
 Node *New_Node(usint y, usint x, char heading, Node *prev_p, Node *next_p);
 
+bool Node_Destruct(Node *node_p);
+
+bool Node_Deallocate(Node **node_pp);
+
+bool Delete_Node(Node **node_pp);
+
 usint Node_GetY(const Node *node_p);
 
 bool Node_SetY(Node *node_p, usint y);
