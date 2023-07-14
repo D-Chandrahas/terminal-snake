@@ -2,8 +2,9 @@ getters and setters
 better arg names
 sync header file
 use enum for heading
-check values in setheading
+check values in setheading(should be one of ['u','d','l','r'])
 formatting of getters and setters
+setters should return bool or ptr
 destructors
 
 main loop
