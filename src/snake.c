@@ -199,7 +199,6 @@ usint Snake_GetAppendX(const Snake *const snake_p)
 	return Node_GetFollowerX(
 		Snake_GetTailPtr(snake_p),
 		Node_FollowerHeadingToRelPos(
-			Snake_GetTailPtr(snake_p),
 			Snake_GetTailHeading(snake_p)));
 }
 
@@ -213,7 +212,6 @@ usint Snake_GetAppendY(const Snake *const snake_p)
 	return Node_GetFollowerY(
 		Snake_GetTailPtr(snake_p),
 		Node_FollowerHeadingToRelPos(
-			Snake_GetTailPtr(snake_p),
 			Snake_GetTailHeading(snake_p)));
 }
 

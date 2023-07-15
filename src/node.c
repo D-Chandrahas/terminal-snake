@@ -18,7 +18,13 @@ Node *Node_Allocate(void)
 	return (Node *)malloc(sizeof(Node));
 }
 
-Node *Node_Construct(Node *node_p, usint y, usint x, char heading, Node *prev_p, Node *next_p)
+Node *Node_Construct(
+	Node *const node_p,
+	const usint y,
+	const usint x,
+	const char heading,
+	const Node *const prev_p,
+	const Node *const next_p)
 {
 	if (node_p == NULL)
 	{
@@ -33,12 +39,17 @@ Node *Node_Construct(Node *node_p, usint y, usint x, char heading, Node *prev_p,
 	return node_p;
 }
 
-Node *New_Node(usint y, usint x, char heading, Node *prev_p, Node *next_p)
+Node *New_Node(
+	const usint y,
+	const usint x,
+	const char heading,
+	const Node *const prev_p,
+	const Node *const next_p)
 {
 	return Node_Construct(Node_Allocate(), y, x, heading, prev_p, next_p);
 }
 
-bool Node_Destruct(Node *node_p)
+bool Node_Destruct(Node *const node_p)
 {
 	if (node_p == NULL)
 	{
@@ -54,7 +65,7 @@ bool Node_Destruct(Node *node_p)
 	return true;
 }
 
-bool Node_Deallocate(Node **node_pp)
+bool Node_Deallocate(Node **const node_pp)
 {
 	if (node_pp == NULL)
 	{
@@ -67,7 +78,7 @@ bool Node_Deallocate(Node **node_pp)
 	return true;
 }
 
-bool Delete_Node(Node **node_pp)
+bool Delete_Node(Node **const node_pp)
 {
 	if (node_pp == NULL)
 	{
@@ -86,7 +97,7 @@ bool Delete_Node(Node **node_pp)
 	return true;
 }
 
-usint Node_GetY(const Node *node_p)
+usint Node_GetY(const Node *const node_p)
 {
 	if (node_p == NULL)
 	{
@@ -96,7 +107,7 @@ usint Node_GetY(const Node *node_p)
 	return node_p->y;
 }
 
-bool Node_SetY(Node *node_p, usint y)
+bool Node_SetY(Node *const node_p, const usint y)
 {
 	if (node_p == NULL)
 	{
@@ -107,7 +118,7 @@ bool Node_SetY(Node *node_p, usint y)
 	return true;
 }
 
-usint Node_GetX(const Node *node_p)
+usint Node_GetX(const Node *const node_p)
 {
 	if (node_p == NULL)
 	{
@@ -117,7 +128,7 @@ usint Node_GetX(const Node *node_p)
 	return node_p->x;
 }
 
-bool Node_SetX(Node *node_p, usint x)
+bool Node_SetX(Node *const node_p, const usint x)
 {
 	if (node_p == NULL)
 	{
@@ -128,7 +139,7 @@ bool Node_SetX(Node *node_p, usint x)
 	return true;
 }
 
-char Node_GetHeading(const Node *node_p)
+char Node_GetHeading(const Node *const node_p)
 {
 	if (node_p == NULL)
 	{
@@ -138,7 +149,7 @@ char Node_GetHeading(const Node *node_p)
 	return node_p->heading;
 }
 
-bool Node_SetHeading(Node *node_p, char heading)
+bool Node_SetHeading(Node *const node_p, const char heading)
 {
 	if (node_p == NULL)
 	{
@@ -149,7 +160,7 @@ bool Node_SetHeading(Node *node_p, char heading)
 	return true;
 }
 
-Node *Node_GetPrevNodePtr(const Node *node_p)
+Node *Node_GetPrevNodePtr(const Node *const node_p)
 {
 	if (node_p == NULL)
 	{
@@ -159,7 +170,7 @@ Node *Node_GetPrevNodePtr(const Node *node_p)
 	return node_p->prev_p;
 }
 
-bool Node_SetPrevNodePtr(Node *node_p, Node *prev_p)
+bool Node_SetPrevNodePtr(Node *const node_p, const Node *const prev_p)
 {
 	if (node_p == NULL)
 	{
@@ -170,7 +181,7 @@ bool Node_SetPrevNodePtr(Node *node_p, Node *prev_p)
 	return true;
 }
 
-Node *Node_GetNextNodePtr(const Node *node_p)
+Node *Node_GetNextNodePtr(const Node *const node_p)
 {
 	if (node_p == NULL)
 	{
@@ -180,7 +191,7 @@ Node *Node_GetNextNodePtr(const Node *node_p)
 	return node_p->next_p;
 }
 
-bool Node_SetNextNodePtr(Node *node_p, Node *next_p)
+bool Node_SetNextNodePtr(Node *const node_p, const Node *const next_p)
 {
 	if (node_p == NULL)
 	{
@@ -191,7 +202,7 @@ bool Node_SetNextNodePtr(Node *node_p, Node *next_p)
 	return true;
 }
 
-usint Node_GetFollowerY(const Node *followedNode_p, char relPos)
+usint Node_GetFollowerY(const Node *const followedNode_p, const char relPos)
 {
 	if (followedNode_p == NULL)
 	{
@@ -216,7 +227,7 @@ usint Node_GetFollowerY(const Node *followedNode_p, char relPos)
 	}
 }
 
-usint Node_GetFollowerX(const Node *followedNode_p, char relPos)
+usint Node_GetFollowerX(const Node *const followedNode_p, const char relPos)
 {
 	if (followedNode_p == NULL)
 	{
@@ -241,13 +252,8 @@ usint Node_GetFollowerX(const Node *followedNode_p, char relPos)
 	}
 }
 
-char Node_FollowerHeadingToRelPos(const Node *followedNode_p, char heading)
+char Node_FollowerHeadingToRelPos(const char heading)
 {
-	if (followedNode_p == NULL)
-	{
-		return '\0';
-	}
-
 	if (heading == 'u')
 	{
 		return 'd';
