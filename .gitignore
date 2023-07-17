@@ -1,7 +1,6 @@
 # Test file
 /include/hello_world.h
 /src/hello_world.c
-/src/main.c
 
 # Prerequisites
 *.d
