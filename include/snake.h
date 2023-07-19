@@ -39,6 +39,10 @@ usint Snake_GetTailX(const Snake *const snake_p);
 
 char Snake_GetTailHeading(const Snake *const snake_p);
 
+char Snake_GetHeading(const Snake *const snake_p);
+
+char Snake_SetHeading(Snake *const snake_p, const char heading);
+
 usint Snake_GetAppendX(const Snake *const snake_p);
 
 usint Snake_GetAppendY(const Snake *const snake_p);

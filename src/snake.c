@@ -189,6 +189,26 @@ char Snake_GetTailHeading(const Snake *const snake_p)
 	return Node_GetHeading(Snake_GetTailPtr(snake_p));
 }
 
+char Snake_GetHeading(const Snake *const snake_p)
+{
+	if (snake_p == NULL)
+	{
+		return '\0';
+	}
+
+	return Node_GetHeading(Snake_GetHeadPtr(snake_p));
+}
+
+char Snake_SetHeading(Snake *const snake_p, const char heading)
+{
+	if (snake_p == NULL)
+	{
+		return '\0';
+	}
+
+	return Node_SetHeading(Snake_GetHeadPtr(snake_p), heading);
+}
+
 usint Snake_GetAppendX(const Snake *const snake_p)
 {
 	if (snake_p == NULL)
