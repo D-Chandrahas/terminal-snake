@@ -2,6 +2,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include "my_types.h"
+#include "heading.h"
 #include "node.h"
 
 struct Node
@@ -254,24 +255,5 @@ usint Node_GetFollowerX(const Node *const followedNode_p, const char relPos)
 
 char Node_FollowerHeadingToRelPos(const char heading)
 {
-	if (heading == 'u')
-	{
-		return 'd';
-	}
-	else if (heading == 'd')
-	{
-		return 'u';
-	}
-	else if (heading == 'l')
-	{
-		return 'r';
-	}
-	else if (heading == 'r')
-	{
-		return 'l';
-	}
-	else
-	{
-		return '\0';
-	}
+	return get_opposite_heading(heading);
 }
