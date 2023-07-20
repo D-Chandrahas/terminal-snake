@@ -237,11 +237,11 @@ usint Node_GetFollowerX(const Node *const followedNode_p, const char relPos)
 
 	if (relPos == 'l')
 	{
-		return followedNode_p->x - 1;
+		return followedNode_p->x - 2;
 	}
 	else if (relPos == 'r')
 	{
-		return followedNode_p->x + 1;
+		return followedNode_p->x + 2;
 	}
 	else if (relPos == 'u' || relPos == 'd')
 	{
