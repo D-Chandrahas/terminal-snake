@@ -12,47 +12,37 @@ Node *Node_Construct(
 	Node *const node_p,
 	const usint y,
 	const usint x,
-	const char heading,
 	const Node *const prev_p,
 	const Node *const next_p);
 
 Node *New_Node(
 	const usint y,
 	const usint x,
-	const char heading,
 	const Node *const prev_p,
 	const Node *const next_p);
 
-bool Node_Destruct(Node *const node_p);
+void Node_Deallocate(Node *const node_p);
 
-bool Node_Deallocate(Node **const node_pp);
-
-bool Delete_Node(Node **const node_pp);
+void Delete_Node(Node *const node_p);
 
 usint Node_GetY(const Node *const node_p);
 
-bool Node_SetY(Node *const node_p, const usint y);
+void Node_SetY(Node *const node_p, const usint y);
 
 usint Node_GetX(const Node *const node_p);
 
-bool Node_SetX(Node *const node_p, const usint x);
-
-char Node_GetHeading(const Node *const node_p);
-
-bool Node_SetHeading(Node *const node_p, const char heading);
+void Node_SetX(Node *const node_p, const usint x);
 
 Node *Node_GetPrevNodePtr(const Node *const node_p);
 
-bool Node_SetPrevNodePtr(Node *const node_p, const Node *const prev_p);
+void Node_SetPrevNodePtr(Node *const node_p, const Node *const prev_p);
 
 Node *Node_GetNextNodePtr(const Node *const node_p);
 
-bool Node_SetNextNodePtr(Node *const node_p, const Node *const next_p);
+void Node_SetNextNodePtr(Node *const node_p, const Node *const next_p);
 
-usint Node_GetFollowerY(const Node *const followedNode_p, const char relPos);
+void Node_SimpleMove(Node *const node_p, const char heading, const usint steps);
 
-usint Node_GetFollowerX(const Node *const followedNode_p, const char relPos);
-
-char Node_FollowerHeadingToRelPos(const char heading);
+void Node_AutoSimpleMove(Node *const node_p);
 
 #endif

@@ -5,15 +5,15 @@ use enum for heading
 check values in setheading(should be one of ['u','d','l','r'])
 formatting of getters and setters
 setters should return bool or ptr
-destructors
+destructors(esp. snake)
 
 change code (append functions) to handle nodes made of 2 chars
 main loop
     get input (handle no input with nodelay())
-    check if snake ate food (without moving in memory)
+    move snake in memory based on input(update x,y,heading etc)
+    check if snake should die
+    check if snake ate food
         increase snake length
         new food
-    move snake in memory based on input(update x,y,heading etc)  <---\
-    check if snake should die                                    <---/
     update screen
 

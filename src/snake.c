@@ -8,6 +8,7 @@
 struct Snake
 {
 	usint len;
+	char heading;
 	Node *head_p;
 	Node *tail_p;
 };
@@ -19,14 +20,11 @@ Snake *Snake_Allocate(void)
 
 Snake *Snake_Construct(Snake *const snake_p)
 {
-	if (snake_p == NULL)
-	{
-		return NULL;
-	}
-
 	Snake_SetLength(snake_p, 0);
+	Snake_SetHeading(snake_p, '\0');
 	Snake_SetHeadPtr(snake_p, NULL);
 	Snake_SetTailPtr(snake_p, NULL);
+
 	return snake_p;
 }
 
@@ -35,11 +33,11 @@ Snake *New_Snake(void)
 	return Snake_Construct(Snake_Allocate());
 }
 
-bool Snake_Destruct(Snake *const snake_p)
+void Snake_Destruct(Snake *const snake_p)
 {
 	if (snake_p == NULL)
 	{
-		return false;
+		return;
 	}
 
 	Node *nodeToBeDeleted_p = NULL;
@@ -53,222 +51,114 @@ bool Snake_Destruct(Snake *const snake_p)
 	}
 
 	Snake_SetLength(snake_p, 0);
+	Snake_SetHeading(snake_p, '\0');
 	Snake_SetHeadPtr(snake_p, NULL);
 	Snake_SetTailPtr(snake_p, NULL);
 
-	return true;
+	return;
 }
 
-bool Snake_Deallocate(Snake **const snake_pp)
+void Snake_Deallocate(Snake *const snake_p)
 {
-	if (snake_pp == NULL)
-	{
-		return false;
-	}
-
-	free(*snake_pp);
-	*snake_pp = NULL;
-
-	return true;
+	free(snake_p);
+	return;
 }
 
-bool Delete_Snake(Snake **const snake_pp)
+void Delete_Snake(Snake *const snake_p)
 {
-	if (snake_pp == NULL)
-	{
-		return false;
-	}
-
-	if (!Snake_Destruct(*snake_pp))
-	{
-		return false;
-	}
-	if (!Snake_Deallocate(snake_pp))
-	{
-		return false;
-	}
-
-	return true;
+	Snake_Destruct(snake_p);
+	Snake_Deallocate(snake_p);
+	return;
 }
 
 usint Snake_GetLength(const Snake *const snake_p)
 {
-	if (snake_p == NULL)
-	{
-		return 0;
-	}
-
-	return snake_p->len;
+	return snake_p ? snake_p->len : -1;
 }
 
-bool Snake_SetLength(Snake *const snake_p, const usint len)
+void Snake_SetLength(Snake *const snake_p, const usint len)
 {
-	if (snake_p == NULL)
+	if (snake_p != NULL)
 	{
-		return false;
+		snake_p->len = len;
 	}
-
-	snake_p->len = len;
-	return true;
+	return;
 }
 
-bool Snake_IncrementLength(Snake *const snake_p)
+void Snake_IncrementLength(Snake *const snake_p)
 {
 	return Snake_SetLength(snake_p, Snake_GetLength(snake_p) + 1);
 }
 
-Node *Snake_GetHeadPtr(const Snake *const snake_p)
+char Snake_GetHeading(const Snake *const snake_p)
 {
-	if (snake_p == NULL)
-	{
-		return NULL;
-	}
-
-	return snake_p->head_p;
+	return snake_p ? snake_p->heading : '\0';
 }
 
-bool Snake_SetHeadPtr(Snake *const snake_p,const Node *const head_p)
+void Snake_SetHeading(Snake *const snake_p, const char heading)
 {
-	if (snake_p == NULL)
+	if (snake_p != NULL)
 	{
-		return false;
+		snake_p->heading = heading;
 	}
+	return;
+}
 
-	snake_p->head_p = head_p;
-	return true;
+Node *Snake_GetHeadPtr(const Snake *const snake_p)
+{
+	return snake_p ? snake_p->head_p : NULL;
+}
+
+void Snake_SetHeadPtr(Snake *const snake_p, const Node *const head_p)
+{
+	if (snake_p != NULL)
+	{
+		snake_p->head_p = head_p;
+	}
+	return;
 }
 
 Node *Snake_GetTailPtr(const Snake *const snake_p)
 {
-	if (snake_p == NULL)
-	{
-		return NULL;
-	}
-
-	return snake_p->tail_p;
+	return snake_p ? snake_p->tail_p : NULL;
 }
 
-bool Snake_SetTailPtr(Snake *const snake_p,const Node *const tail_p)
+void Snake_SetTailPtr(Snake *const snake_p, const Node *const tail_p)
 {
-	if (snake_p == NULL)
+	if (snake_p != NULL)
 	{
-		return false;
+		snake_p->tail_p = tail_p;
 	}
-
-	snake_p->tail_p = tail_p;
 	return true;
 }
 
 usint Snake_GetTailY(const Snake *const snake_p)
 {
-	if (snake_p == NULL)
-	{
-		return -1;
-	}
-
 	return Node_GetY(Snake_GetTailPtr(snake_p));
 }
 
 usint Snake_GetTailX(const Snake *const snake_p)
 {
-	if (snake_p == NULL)
-	{
-		return -1;
-	}
-
 	return Node_GetX(Snake_GetTailPtr(snake_p));
 }
 
-char Snake_GetTailHeading(const Snake *const snake_p)
+Snake *Snake_Init(Snake *const snake_p, const usint y, const usint x, const char heading)
 {
-	if (snake_p == NULL)
-	{
-		return '\0';
-	}
-
-	return Node_GetHeading(Snake_GetTailPtr(snake_p));
-}
-
-char Snake_GetHeading(const Snake *const snake_p)
-{
-	if (snake_p == NULL)
-	{
-		return '\0';
-	}
-
-	return Node_GetHeading(Snake_GetHeadPtr(snake_p));
-}
-
-char Snake_SetHeading(Snake *const snake_p, const char heading)
-{
-	if (snake_p == NULL)
-	{
-		return '\0';
-	}
-
-	return Node_SetHeading(Snake_GetHeadPtr(snake_p), heading);
-}
-
-usint Snake_GetAppendX(const Snake *const snake_p)
-{
-	if (snake_p == NULL)
-	{
-		return -1;
-	}
-
-	return Node_GetFollowerX(
-		Snake_GetTailPtr(snake_p),
-		Node_FollowerHeadingToRelPos(
-			Snake_GetTailHeading(snake_p)));
-}
-
-usint Snake_GetAppendY(const Snake *const snake_p)
-{
-	if (snake_p == NULL)
-	{
-		return -1;
-	}
-
-	return Node_GetFollowerY(
-		Snake_GetTailPtr(snake_p),
-		Node_FollowerHeadingToRelPos(
-			Snake_GetTailHeading(snake_p)));
-}
-
-bool Snake_Init(Snake *const snake_p, const usint y, const usint x, const char heading)
-{
-	if (snake_p == NULL)
-	{
-		return false;
-	}
-
-	Node *newNode_p = New_Node(y, x, heading, NULL, NULL);
+	Node *newNode_p = New_Node(y, x, NULL, NULL);
+	Snake_SetHeading(snake_p, heading);
 	Snake_SetHeadPtr(snake_p, newNode_p);
 	Snake_SetTailPtr(snake_p, newNode_p);
 	Snake_IncrementLength(snake_p);
-	return true;
+
+	return snake_p;
 }
 
-bool Snake_Append(Snake *const snake_p)
+Snake *Snake_Append(Snake *const snake_p, const usint y, const usint x, const char heading)
 {
-	if(snake_p == NULL)
-	{
-		return false;
-	}
-
-	if (Snake_GetLength(snake_p) == 0)
-	{
-		return false;
-	}
-
-	Node *newNode_p = New_Node(
-		Snake_GetAppendY(snake_p),
-		Snake_GetAppendX(snake_p),
-		Snake_GetTailHeading(snake_p),
-		Snake_GetTailPtr(snake_p),
-		NULL);
+	Node *newNode_p = New_Node(y, x, Snake_GetTailPtr(snake_p), NULL);
 	Node_SetNextNodePtr(Snake_GetTailPtr(snake_p), newNode_p);
 	Snake_SetTailPtr(snake_p, newNode_p);
 	Snake_IncrementLength(snake_p);
-	return true;
+
+	return snake_p;
 }
