@@ -14,6 +14,7 @@ void init_window(void)
 	raw();
 	keypad(stdscr, TRUE);
 	noecho();
+	nodelay(stdscr, TRUE);
 	clear();
 	move(0, 0);
 	refresh();
@@ -33,6 +34,7 @@ void game_over_screen(void)
 	mvaddstr(LINES / 2, COLS / 2 - 5, "GAME OVER");
 	mvaddstr(LINES / 2 + 1, COLS / 2 - 5, "Press any key to exit");
 	refresh();
+	nodelay(stdscr, FALSE);
 	getch();
 	return;
 }

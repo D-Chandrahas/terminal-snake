@@ -1,12 +1,12 @@
 #include <ncurses.h>
 #include "utils.h"
+#include "heading.h"
 #include "snake.h"
 #include "game.h"
 
 int main()
 {
 	init_game();
-	nodelay(stdscr, TRUE);
 
 	Snake *snake_p = New_Snake();
 	Snake_Init(snake_p, LINES / 2, COLS / 2, 'r');
@@ -38,7 +38,7 @@ int main()
 			game_over_screen();
 			break;
 		}
-		sleep_ms(400);
+		sleep_ms(250);
 	}
 
 	end_game();

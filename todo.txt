@@ -6,6 +6,7 @@ check values in setheading(should be one of ['u','d','l','r'])
 formatting of getters and setters
 setters should return bool or ptr
 destructors(esp. snake)
+flush input buffer in main loop on getch
 
 change code (append functions) to handle nodes made of 2 chars
 main loop
