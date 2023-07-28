@@ -43,6 +43,4 @@ void Node_SetNextNodePtr(Node *const node_p, const Node *const next_p);
 
 void Node_SimpleMove(Node *const node_p, const char heading, const usint steps);
 
-void Node_AutoSimpleMove(Node *const node_p);
-
 #endif

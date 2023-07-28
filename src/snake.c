@@ -47,7 +47,7 @@ void Snake_Destruct(Snake *const snake_p)
 	{
 		nodeToBeDeleted_p = nodeToBeDeletedNext_p;
 		nodeToBeDeletedNext_p = Node_GetPrevNodePtr(nodeToBeDeleted_p);
-		Delete_Node(&nodeToBeDeleted_p);
+		Delete_Node(nodeToBeDeleted_p);
 	}
 
 	Snake_SetLength(snake_p, 0);
@@ -129,7 +129,7 @@ void Snake_SetTailPtr(Snake *const snake_p, const Node *const tail_p)
 	{
 		snake_p->tail_p = tail_p;
 	}
-	return true;
+	return;
 }
 
 usint Snake_GetTailY(const Snake *const snake_p)

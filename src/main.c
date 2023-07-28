@@ -10,10 +10,6 @@ int main()
 
 	Snake *snake_p = New_Snake();
 	Snake_Init(snake_p, LINES / 2, COLS / 2, 'r');
-	for (int i = 1; i <= 7; i++)
-	{
-		Snake_Append(snake_p);
-	}
 
 	int ch = 0;
 	while ((ch = getch()) != KEY_ESC)
@@ -32,9 +28,9 @@ int main()
 			Snake_SetHeading(snake_p, inp_heading);
 		}
 
+		tick_snake(snake_p);
 		if (inside_bounds(snake_p))
 		{
-			tick_snake(snake_p);
 			render_frame(snake_p);
 		}
 		else
@@ -42,7 +38,10 @@ int main()
 			game_over_screen();
 			break;
 		}
+		sleep_ms(400);
 	}
+
 	end_game();
+
 	return 0;
 }
