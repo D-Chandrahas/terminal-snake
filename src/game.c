@@ -6,6 +6,10 @@
 void init_term(void)
 {
 	setlocale(LC_ALL, ".UTF-8");
+	// refresh();
+	// curs_set(0);
+	// refresh();
+	return;
 }
 
 void init_window(void)
@@ -134,7 +138,7 @@ void render_frame(const Snake *const snake_p)
 	clear();
 	for(Node *curr_p = Snake_GetHeadPtr(snake_p); curr_p != NULL; curr_p = Node_GetNextNodePtr(curr_p))
 	{
-		mvaddstr(Node_GetY(curr_p), Node_GetX(curr_p), "██");
+		mvaddwstr(Node_GetY(curr_p), Node_GetX(curr_p), L"\u2588\u2588");
 	}
 	refresh();
 	return;
