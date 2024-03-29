@@ -2,6 +2,9 @@
 /include/hello_world.h
 /src/hello_world.c
 
+# Compiled binaries
+/bin/*.exe
+
 # Prerequisites
 *.d
 

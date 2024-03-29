@@ -7,6 +7,7 @@ formatting of getters and setters
 setters should return bool or ptr
 destructors(esp. snake)
 flush input buffer in main loop on getch
+invisible cursor (maybe by moving it to any node position)
 
 change code (append functions) to handle nodes made of 2 chars
 main loop
@@ -18,3 +19,11 @@ main loop
         new food
     update screen
 
+draw borders
+
+optimise snake renderer
+    draw new head
+    if did not eat food
+        erase tail
+
+random snake initial spawn

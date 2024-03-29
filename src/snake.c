@@ -153,7 +153,7 @@ Snake *Snake_Init(Snake *const snake_p, const usint y, const usint x, const char
 	return snake_p;
 }
 
-Snake *Snake_Append(Snake *const snake_p, const usint y, const usint x, const char heading)
+Snake *Snake_Append(Snake *const snake_p, const usint y, const usint x)
 {
 	Node *newNode_p = New_Node(y, x, Snake_GetTailPtr(snake_p), NULL);
 	Node_SetNextNodePtr(Snake_GetTailPtr(snake_p), newNode_p);
@@ -161,4 +161,25 @@ Snake *Snake_Append(Snake *const snake_p, const usint y, const usint x, const ch
 	Snake_IncrementLength(snake_p);
 
 	return snake_p;
+}
+
+bool Snake_SelfCollision(const Snake *const snake_p)
+{
+	if (snake_p == NULL)
+	{
+		return false;
+	}
+
+	const Node *const head_p = Snake_GetHeadPtr(snake_p);
+	const Node *curr_p = Node_GetNextNodePtr(head_p);
+	while (curr_p != NULL)
+	{
+		if (Node_GetY(head_p) == Node_GetY(curr_p) && Node_GetX(head_p) == Node_GetX(curr_p))
+		{
+			return true;
+		}
+		curr_p = Node_GetNextNodePtr(curr_p);
+	}
+
+	return false;
 }

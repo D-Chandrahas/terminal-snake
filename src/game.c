@@ -25,10 +25,39 @@ void init_window(void)
 	return;
 }
 
+void draw_borders(void)
+{
+	move(0, 0);
+	for (int i = 0; i < COLS; i++)
+	{
+		addch('-');
+	}
+
+	move(LINES - 1, 0);
+	for (int i = 0; i < COLS; i++)
+	{
+		addch('-');
+	}
+	
+	for (int i = 0; i < LINES; i++)
+	{
+		mvaddch(i, 0, '|');
+	}
+
+	for (int i = 0; i < LINES; i++)
+	{
+		mvaddch(i, COLS - 1, '|');
+	}
+
+	refresh();
+	return;
+}
+
 void init_game(void)
 {
 	init_term();
 	init_window();
+	draw_borders();
 	return;
 }
 
@@ -36,7 +65,7 @@ void game_over_screen(void)
 {
 	clear();
 	mvaddstr(LINES / 2, COLS / 2 - 5, "GAME OVER");
-	mvaddstr(LINES / 2 + 1, COLS / 2 - 5, "Press any key to exit");
+	mvaddstr(LINES / 2 + 1, COLS / 2 - 10, "Press any key to exit");
 	refresh();
 	nodelay(stdscr, FALSE);
 	getch();
@@ -125,21 +154,30 @@ bool inside_bounds(const Snake *const snake_p)
 	const Node *const head_p = Snake_GetHeadPtr(snake_p);
 	const int head_x = Node_GetX(head_p);
 	const int head_y = Node_GetY(head_p);
-	return (head_x >= 0 && head_x < COLS && head_y >= 0 && head_y < LINES);
+	return (head_x >= 1 && head_x <= COLS-3 && head_y >= 1 && head_y <= LINES-2);
 }
 
-void render_frame(const Snake *const snake_p)
+void draw_snake(const Snake *const snake_p, const usint tail_y, const usint tail_x, bool keep_prev_tail)
 {
 	if (snake_p == NULL)
 	{
 		return;
 	}
 
-	clear();
-	for(Node *curr_p = Snake_GetHeadPtr(snake_p); curr_p != NULL; curr_p = Node_GetNextNodePtr(curr_p))
+	// clear();
+	// for(Node *curr_p = Snake_GetHeadPtr(snake_p); curr_p != NULL; curr_p = Node_GetNextNodePtr(curr_p))
+	// {
+	// 	mvaddwstr(Node_GetY(curr_p), Node_GetX(curr_p), L"\u2588\u2588");
+	// }
+
+	if(!keep_prev_tail)
 	{
-		mvaddwstr(Node_GetY(curr_p), Node_GetX(curr_p), L"\u2588\u2588");
+		mvaddstr(tail_y, tail_x, "  ");
 	}
+	Node *head_p = Snake_GetHeadPtr(snake_p);
+	mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), L"\u2588\u2588");
+
+	move(0, 0);
 	refresh();
 	return;
 }

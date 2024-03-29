@@ -43,6 +43,8 @@ usint Snake_GetTailX(const Snake *const snake_p);
 
 Snake *Snake_Init(Snake *const snake_p, const usint y, const usint x, const char heading);
 
-Snake *Snake_Append(Snake *const snake_p, const usint y, const usint x, const char heading);
+Snake *Snake_Append(Snake *const snake_p, const usint y, const usint x);
+
+bool Snake_SelfCollision(const Snake *const snake_p);
 
 #endif

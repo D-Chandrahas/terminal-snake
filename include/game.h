@@ -7,6 +7,8 @@ void init_term(void);
 
 void init_window(void);
 
+void draw_borders(void);
+
 void init_game(void);
 
 void game_over_screen(void);
@@ -21,6 +23,6 @@ void sleep_ms(const int milliseconds);
 
 bool inside_bounds(const Snake *const snake_p);
 
-void render_frame(const Snake *const snake_p);
+void draw_snake(const Snake *const snake_p, const usint tail_y, const usint tail_x, bool keep_prev_tail);
 
 #endif
