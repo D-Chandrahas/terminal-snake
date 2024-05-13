@@ -3,16 +3,19 @@
 #include "heading.h"
 #include "snake.h"
 #include "game.h"
+#include "food.h"
 
 int main()
 {
 	init_game();
 
 	Snake *snake_p = New_Snake();
-	Snake_Init(snake_p, LINES / 2, COLS / 2, 'r');
+	Snake_Init(snake_p, (LINES/2) + (LINES/2)%2 - 1, (COLS/2) + (COLS/2)%2 - 1, 'r');
 
 	int ch = 0;
 	usint prev_TailX = -1, prev_TailY = -1;
+	Food food;
+	spawn_food(&food, snake_p);
 	bool ate_food = false;
 	while ((ch = getch()) != KEY_ESC)
 	{
@@ -31,12 +34,11 @@ int main()
 
 		if (inside_bounds(snake_p) && !Snake_SelfCollision(snake_p))
 		{
-			// if ate food snake append prev tail
-			if (ch == 'f')
+			if (check_ate_food(&food, snake_p))
 			{
 				ate_food = true;
 				Snake_Append(snake_p, prev_TailY, prev_TailX);
-				// new food
+				spawn_food(&food, snake_p);
 			}
 			draw_snake(snake_p, prev_TailY, prev_TailX, ate_food);
 		}

@@ -27,3 +27,8 @@ optimise snake renderer
         erase tail
 
 random snake initial spawn
+spawned food should not be on snake
+align food and snake
+combine prev tail x&y
+better borders
+better random food spawn algo.
