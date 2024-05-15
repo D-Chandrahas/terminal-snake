@@ -5,12 +5,17 @@
 #include "game.h"
 #include "food.h"
 
+#define SNAKE_INIT_LEN 4
+#define TICK_TIME 250
+
 int main()
 {
 	init_game();
 
 	Snake *snake_p = New_Snake();
 	Snake_Init(snake_p, (LINES/2) + (LINES/2)%2 - 1, (COLS/2) + (COLS/2)%2 - 1, 'r');
+	feed_snake(snake_p, (SNAKE_INIT_LEN) - 1);
+	draw_snake(snake_p, -1, -1, false, true);
 
 	int ch = 0;
 	usint prev_TailX = -1, prev_TailY = -1;
@@ -40,16 +45,17 @@ int main()
 				Snake_Append(snake_p, prev_TailY, prev_TailX);
 				spawn_food(&food, snake_p);
 			}
-			draw_snake(snake_p, prev_TailY, prev_TailX, ate_food);
+			draw_snake(snake_p, prev_TailY, prev_TailX, ate_food, false);
 		}
 		else
 		{
 			game_over_screen();
 			break;
 		}
-		sleep_ms(250);
+		sleep_ms(TICK_TIME);
 	}
 
+	Delete_Snake(snake_p);
 	end_game();
 
 	return 0;

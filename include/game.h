@@ -11,7 +11,7 @@ void init_window(void);
 
 void set_game_area_limits(void);
 
-void draw_borders(bool extra_right_border);
+void draw_borders(bool offset_right_border);
 
 void init_game(void);
 
@@ -27,7 +27,7 @@ void sleep_ms(const int milliseconds);
 
 bool inside_bounds(const Snake *const snake_p);
 
-void draw_snake(const Snake *const snake_p, const usint tail_y, const usint tail_x, bool keep_prev_tail);
+void draw_snake(const Snake *const snake_p, const usint prev_tail_y, const usint prev_tail_x, bool keep_prev_tail, bool initial_draw);
 
 void draw_food(const Food *const food_p);
 
@@ -36,5 +36,7 @@ bool is_occupied_by_snake(const Snake *const snake_p, const usint y, const usint
 bool check_ate_food(const Food *const food_p, const Snake *const snake_p);
 
 void spawn_food(Food *const food_p, const Snake *const snake_p);
+
+void feed_snake(Snake *const snake_p, usint quantity);
 
 #endif

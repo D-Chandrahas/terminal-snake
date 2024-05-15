@@ -5,6 +5,10 @@
 #include "snake.h"
 #include "game.h"
 
+#define FOOD L"🍰" //L"\ud83c\udf70"
+#define SNAKE_HEAD L"👀" //L"\ud83d\udc40"
+#define SNAKE_BODY L"██" //L"\u2588\u2588"
+
 usint GAME_X_MIN, GAME_X_MAX, GAME_Y_MIN, GAME_Y_MAX;
 
 void init_term(void)
@@ -39,36 +43,28 @@ void set_game_area_limits(void)
 	return;
 }
 
-void draw_borders(bool extra_right_border)
+void draw_borders(bool offset_right_border)
 {
 	move(0, 0);
-	for (int i = 0; i < COLS; i++)
+	for (usint i = 0; i < COLS - offset_right_border; i++)
 	{
 		addch('-');
 	}
 
 	move(LINES - 1, 0);
-	for (int i = 0; i < COLS; i++)
+	for (usint i = 0; i < COLS - offset_right_border; i++)
 	{
 		addch('-');
 	}
 	
-	for (int i = 0; i < LINES; i++)
+	for (usint i = 0; i < LINES; i++)
 	{
 		mvaddch(i, 0, '|');
 	}
 
-	for (int i = 0; i < LINES; i++)
+	for (usint i = 0; i < LINES; i++)
 	{
-		mvaddch(i, COLS - 1, '|');
-	}
-
-	if(extra_right_border)
-	{
-		for (int i = 0; i < LINES; i++)
-		{
-			mvaddch(i, COLS - 2, '|');
-		}
+		mvaddch(i, COLS - 1 - offset_right_border, '|');
 	}
 
 	refresh();
@@ -176,30 +172,39 @@ bool inside_bounds(const Snake *const snake_p)
 	}
 
 	const Node *const head_p = Snake_GetHeadPtr(snake_p);
-	const int head_x = Node_GetX(head_p);
-	const int head_y = Node_GetY(head_p);
+	const usint head_x = Node_GetX(head_p);
+	const usint head_y = Node_GetY(head_p);
 	return (head_x >= GAME_X_MIN && head_x <= GAME_X_MAX && head_y >= GAME_Y_MIN && head_y <= GAME_Y_MAX);
 }
 
-void draw_snake(const Snake *const snake_p, const usint tail_y, const usint tail_x, bool keep_prev_tail)
+void draw_snake(const Snake *const snake_p, const usint prev_tail_y, const usint prev_tail_x, bool keep_prev_tail, bool initial_draw)
 {
 	if (snake_p == NULL)
 	{
 		return;
 	}
 
-	// clear();
-	// for(Node *curr_p = Snake_GetHeadPtr(snake_p); curr_p != NULL; curr_p = Node_GetNextNodePtr(curr_p))
-	// {
-	// 	mvaddwstr(Node_GetY(curr_p), Node_GetX(curr_p), L"\u2588\u2588");
-	// }
-
-	if(!keep_prev_tail)
+	if(initial_draw)
 	{
-		mvaddstr(tail_y, tail_x, "  ");
+		const Node *const head_p = Snake_GetHeadPtr(snake_p);
+		mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), SNAKE_HEAD);
+		for(const Node *curr_p = Node_GetNextNodePtr(head_p); curr_p != NULL; curr_p = Node_GetNextNodePtr(curr_p))
+		{
+			mvaddwstr(Node_GetY(curr_p), Node_GetX(curr_p), SNAKE_BODY);
+		}
+
 	}
-	const Node *const head_p = Snake_GetHeadPtr(snake_p);
-	mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), L"██");//L"\u2588\u2588");
+	else
+	{
+		if(!keep_prev_tail)
+		{
+			mvaddstr(prev_tail_y, prev_tail_x, "  ");
+		}
+		const Node *const head_p = Snake_GetHeadPtr(snake_p);
+		Node *const prev_head_p = Node_GetNextNodePtr(head_p);
+		mvaddwstr(Node_GetY(prev_head_p), Node_GetX(prev_head_p), SNAKE_BODY);
+		mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), SNAKE_HEAD);
+	}
 
 	move(0, 0);
 	refresh();
@@ -212,8 +217,8 @@ void draw_food(const Food *const food_p)
 	{
 		return;
 	}
-// todo: add color and diff. char
-	mvaddwstr(Food_GetY(food_p), Food_GetX(food_p), L"🍕");
+
+	mvaddwstr(Food_GetY(food_p), Food_GetX(food_p), FOOD);
 	move(0, 0);
 	refresh();
 	return;
@@ -268,5 +273,20 @@ void spawn_food(Food *const food_p, const Snake *const snake_p)
 	Food_SetX(food_p, x);
 
 	draw_food(food_p);
+	return;
+}
+
+void feed_snake(Snake *const snake_p, usint quantity)
+{
+	if (snake_p == NULL || quantity < 1)
+	{
+		return;
+	}
+
+	for ( ; quantity > 0; quantity--)
+	{
+		Snake_Append(snake_p, Snake_GetTailY(snake_p), Snake_GetTailX(snake_p) - 2);
+	}
+
 	return;
 }
