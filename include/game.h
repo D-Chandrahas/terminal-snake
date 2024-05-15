@@ -17,7 +17,7 @@ void init_game(void);
 
 void game_start_screen(void);
 
-void update_score(const usint score);
+void display_at_top(const char *name, const usint value);
 
 void game_over_screen(const usint score);
 

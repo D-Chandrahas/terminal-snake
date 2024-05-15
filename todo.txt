@@ -38,3 +38,4 @@ change snake head based on direction? - depends on snake head shape/emoji
 // score display
 change eye emoji to mouth when near food
 xbox controller support
+// variable speed

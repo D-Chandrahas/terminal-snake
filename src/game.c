@@ -10,6 +10,7 @@
 #define SNAKE_BODY L"██" //L"\u2588\u2588"
 
 usint GAME_X_MIN, GAME_X_MAX, GAME_Y_MIN, GAME_Y_MAX;
+usint GAME_LEFT_BORDER, GAME_RIGHT_BORDER, GAME_TOP_BORDER, GAME_BOTTOM_BORDER;
 
 void init_term(void)
 {
@@ -40,19 +41,24 @@ void set_game_area_limits(void)
 	GAME_Y_MIN = 1;
 	GAME_X_MAX = COLS - 3 - (COLS % 2);
 	GAME_Y_MAX = LINES - 2;
+
+	GAME_LEFT_BORDER = GAME_X_MIN - 1;
+	GAME_RIGHT_BORDER = GAME_X_MAX + 2;
+	GAME_TOP_BORDER = GAME_Y_MIN - 1;
+	GAME_BOTTOM_BORDER = GAME_Y_MAX + 1;
 	return;
 }
 
 void draw_borders(void)
 {
 	move(0, 0);
-	for (usint i = 0; i < COLS - COLS % 2; i++)
+	for (usint i = 0; i <= GAME_RIGHT_BORDER; i++)
 	{
 		addch('-');
 	}
 
 	move(LINES - 1, 0);
-	for (usint i = 0; i < COLS - COLS % 2; i++)
+	for (usint i = 0; i <= GAME_RIGHT_BORDER; i++)
 	{
 		addch('-');
 	}
@@ -64,7 +70,7 @@ void draw_borders(void)
 
 	for (usint i = 0; i < LINES; i++)
 	{
-		mvaddch(i, COLS - 1 - COLS % 2, '|');
+		mvaddch(i, GAME_RIGHT_BORDER, '|');
 	}
 
 	refresh();
@@ -83,22 +89,32 @@ void init_game(void)
 
 void game_start_screen(void)
 {
-	mvaddstr(LINES / 2 - 1, COLS / 2 - 10, "Use Arrow keys to turn");
-	mvaddstr(LINES / 2, COLS / 2 - 10, "Press any key to start");
+	mvaddstr(LINES / 2 - 1, COLS / 2 - 10, "Use Arrows or WASD to turn");
+	mvaddstr(LINES / 2, COLS / 2 - 20, "Press '[' or ']' to increase/decrease speed");
+	mvaddstr(LINES / 2 + 1, COLS / 2 - 10, "Press any key to start");
 	refresh();
 	nodelay(stdscr, FALSE);
 	getch();
 	nodelay(stdscr, TRUE);
-	mvaddstr(LINES / 2 - 1, COLS / 2 - 10, "                      ");
-	mvaddstr(LINES / 2, COLS / 2 - 10, "                      ");
+	mvaddstr(LINES / 2 - 1, COLS / 2 - 10, "                          ");
+	mvaddstr(LINES / 2, COLS / 2 - 20, "                                           ");
+	mvaddstr(LINES / 2 + 1, COLS / 2 - 10, "                      ");
 	move(0, 0);
 	refresh();
 	return;
 }
 
-void update_score(const usint score)
+void display_at_top(const char *name, const usint value)
 {
-	mvprintw(0, 0, "SCORE %hu", score);
+	attron(A_REVERSE);
+	mvprintw(0, 0, "%s %hu", name, value);
+	attroff(A_REVERSE);
+	for(int x = getcurx(stdscr); x <= GAME_RIGHT_BORDER; ++x)
+	{
+		addch('-');
+	}
+	mvaddch(0, GAME_RIGHT_BORDER, '|');
+	move(0, 0);
 	refresh();
 	return;
 }
@@ -129,11 +145,19 @@ char arrowkey_to_heading(const int ch)
 	{
 	case KEY_LEFT:
 		return 'l';
+	case 'a':
+		return 'l';
 	case KEY_RIGHT:
+		return 'r';
+	case 'd':
 		return 'r';
 	case KEY_UP:
 		return 'u';
+	case 'w':
+		return 'u';
 	case KEY_DOWN:
+		return 'd';
+	case 's':
 		return 'd';
 	default:
 		return '\0';

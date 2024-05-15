@@ -6,19 +6,20 @@
 #include "food.h"
 
 #define SNAKE_INIT_LEN 4
-#define TICK_TIME 250
+#define DEFAULT_SPEED 5
 
 int main()
 {
+	usint speed = DEFAULT_SPEED;
 	init_game();
 	game_start_screen();
 
 	usint score = 0;
-	update_score(score);
+	display_at_top("SCORE", score);
 
 	Snake *snake_p = New_Snake();
 	Snake_Init(snake_p, (LINES/2) + (LINES/2)%2 - 1, (COLS/2) + (COLS/2)%2 - 1, 'r');
-	feed_snake(snake_p, (SNAKE_INIT_LEN) - 1);
+	feed_snake(snake_p, SNAKE_INIT_LEN - 1);
 	draw_snake(snake_p, -1, -1, false, true);
 
 	int ch = 0;
@@ -28,6 +29,24 @@ int main()
 	bool ate_food = false;
 	while ((ch = getch()) != KEY_ESC)
 	{
+		if(ch == '[' || ch == ']')
+		{
+			nodelay(stdscr, false);
+			display_at_top("SPEED", speed);
+			while ((ch = getch()) != KEY_ESC)
+			{
+				if(ch == '[' || ch == ']')
+				{
+					speed += ch - 92;
+					if (speed < 1){speed = 1;}
+					display_at_top("SPEED", speed);
+				}
+			}
+			nodelay(stdscr, true);
+			display_at_top("SCORE", score);
+			sleep_ms(500);
+			continue;
+		}
 		ate_food = false;
 		prev_TailX = Snake_GetTailX(snake_p);
 		prev_TailY = Snake_GetTailY(snake_p);
@@ -47,7 +66,7 @@ int main()
 			{
 				ate_food = true;
 				Snake_Append(snake_p, prev_TailY, prev_TailX);
-				update_score(++score);
+				display_at_top("SCORE", ++score);
 				spawn_food(&food, snake_p);
 			}
 			draw_snake(snake_p, prev_TailY, prev_TailX, ate_food, false);
@@ -57,7 +76,7 @@ int main()
 			game_over_screen(score);
 			break;
 		}
-		sleep_ms(TICK_TIME);
+		sleep_ms(1000/speed);
 	}
 
 	Delete_Snake(snake_p);
