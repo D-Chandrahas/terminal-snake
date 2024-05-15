@@ -11,11 +11,15 @@ void init_window(void);
 
 void set_game_area_limits(void);
 
-void draw_borders(bool offset_right_border);
+void draw_borders(void);
 
 void init_game(void);
 
-void game_over_screen(void);
+void game_start_screen(void);
+
+void update_score(const usint score);
+
+void game_over_screen(const usint score);
 
 void end_game(void);
 

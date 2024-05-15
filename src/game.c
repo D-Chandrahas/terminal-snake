@@ -43,16 +43,16 @@ void set_game_area_limits(void)
 	return;
 }
 
-void draw_borders(bool offset_right_border)
+void draw_borders(void)
 {
 	move(0, 0);
-	for (usint i = 0; i < COLS - offset_right_border; i++)
+	for (usint i = 0; i < COLS - COLS % 2; i++)
 	{
 		addch('-');
 	}
 
 	move(LINES - 1, 0);
-	for (usint i = 0; i < COLS - offset_right_border; i++)
+	for (usint i = 0; i < COLS - COLS % 2; i++)
 	{
 		addch('-');
 	}
@@ -64,7 +64,7 @@ void draw_borders(bool offset_right_border)
 
 	for (usint i = 0; i < LINES; i++)
 	{
-		mvaddch(i, COLS - 1 - offset_right_border, '|');
+		mvaddch(i, COLS - 1 - COLS % 2, '|');
 	}
 
 	refresh();
@@ -76,16 +76,39 @@ void init_game(void)
 	init_term();
 	init_window();
 	set_game_area_limits();
-	draw_borders(COLS % 2);
+	draw_borders();
 	srand(time(NULL));
 	return;
 }
 
-void game_over_screen(void)
+void game_start_screen(void)
+{
+	mvaddstr(LINES / 2 - 1, COLS / 2 - 10, "Use Arrow keys to turn");
+	mvaddstr(LINES / 2, COLS / 2 - 10, "Press any key to start");
+	refresh();
+	nodelay(stdscr, FALSE);
+	getch();
+	nodelay(stdscr, TRUE);
+	mvaddstr(LINES / 2 - 1, COLS / 2 - 10, "                      ");
+	mvaddstr(LINES / 2, COLS / 2 - 10, "                      ");
+	move(0, 0);
+	refresh();
+	return;
+}
+
+void update_score(const usint score)
+{
+	mvprintw(0, 0, "SCORE %hu", score);
+	refresh();
+	return;
+}
+
+void game_over_screen(const usint score)
 {
 	clear();
 	mvaddstr(LINES / 2 - 1 , COLS / 2 - 5, "GAME OVER");
-	mvaddstr(LINES / 2, COLS / 2 - 10, "Press any key to exit");
+	mvprintw(LINES / 2, COLS / 2 - 7, "Your score: %hu", score);
+	mvaddstr(LINES / 2 + 1, COLS / 2 - 10, "Press any key to exit");
 	refresh();
 	nodelay(stdscr, FALSE);
 	getch();
@@ -259,15 +282,21 @@ void spawn_food(Food *const food_p, const Snake *const snake_p)
 	{
 		return;
 	}
-
-	usint x = 0, y = 0;
 	
-	do
+	usint y = GAME_Y_MIN + (rand() % ((GAME_Y_MAX - GAME_Y_MIN)/2 + 1)) * 2;
+	usint x = GAME_X_MIN + (rand() % ((GAME_X_MAX - GAME_X_MIN)/2 + 1)) * 2;
+	
+	while(is_occupied_by_snake(snake_p, y, x))
 	{
-		y = GAME_Y_MIN + (rand() % ((GAME_Y_MAX - GAME_Y_MIN)/2 + 1)) * 2;
-		x = GAME_X_MIN + (rand() % ((GAME_X_MAX - GAME_X_MIN)/2 + 1)) * 2;
+		if(++x > GAME_X_MAX)
+		{
+			x = GAME_X_MIN;
+			if(++y > GAME_Y_MAX)
+			{
+				y = GAME_Y_MIN;
+			}
+		}
 	}
-	while(is_occupied_by_snake(snake_p, y, x));
 
 	Food_SetY(food_p, y);
 	Food_SetX(food_p, x);

@@ -11,6 +11,10 @@
 int main()
 {
 	init_game();
+	game_start_screen();
+
+	usint score = 0;
+	update_score(score);
 
 	Snake *snake_p = New_Snake();
 	Snake_Init(snake_p, (LINES/2) + (LINES/2)%2 - 1, (COLS/2) + (COLS/2)%2 - 1, 'r');
@@ -43,13 +47,14 @@ int main()
 			{
 				ate_food = true;
 				Snake_Append(snake_p, prev_TailY, prev_TailX);
+				update_score(++score);
 				spawn_food(&food, snake_p);
 			}
 			draw_snake(snake_p, prev_TailY, prev_TailX, ate_food, false);
 		}
 		else
 		{
-			game_over_screen();
+			game_over_screen(score);
 			break;
 		}
 		sleep_ms(TICK_TIME);
