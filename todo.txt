@@ -29,13 +29,17 @@ optimise snake renderer
 random snake initial spawn
 // spawned food should not be on snake
 // align food and snake
-combine prev tail x&y
 better borders
 // better random food spawn algo.
 change snake head based on direction? - depends on snake head shape/emoji
 // initial size 4
 // game start screen with help
 // score display
-change eye emoji to mouth when near food
-xbox controller support
+// change eye emoji to mouth when near food
+xbox controller support on windows using xinput
 // variable speed
+
+better ingame help
+readme
+
+recheck prev commit

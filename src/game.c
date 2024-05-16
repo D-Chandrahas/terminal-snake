@@ -2,12 +2,17 @@
 #include <ncurses.h>
 #include <time.h>
 #include <stdlib.h>
+#include <math.h>
 #include "snake.h"
 #include "game.h"
+#include "utils.h"
 
 #define FOOD L"🍰" //L"\ud83c\udf70"
-#define SNAKE_HEAD L"👀" //L"\ud83d\udc40"
+#define SNAKE_FACE L"👀" //L"\ud83d\udc40"
 #define SNAKE_BODY L"██" //L"\u2588\u2588"
+#define SNAKE_OPEN_MOUTH L"👄" //L"\ud83d\udc44"
+#define SNAKE_HAPPY L"😋" //L"\ud83d\ude0b"
+#define SNAKE_DEAD L"☠️" //L"\u2620\ufe0f"
 
 usint GAME_X_MIN, GAME_X_MAX, GAME_Y_MIN, GAME_Y_MAX;
 usint GAME_LEFT_BORDER, GAME_RIGHT_BORDER, GAME_TOP_BORDER, GAME_BOTTOM_BORDER;
@@ -121,13 +126,13 @@ void display_at_top(const char *name, const usint value)
 
 void game_over_screen(const usint score)
 {
-	clear();
+	// clear();
 	mvaddstr(LINES / 2 - 1 , COLS / 2 - 5, "GAME OVER");
 	mvprintw(LINES / 2, COLS / 2 - 7, "Your score: %hu", score);
-	mvaddstr(LINES / 2 + 1, COLS / 2 - 10, "Press any key to exit");
+	mvaddstr(LINES / 2 + 1, COLS / 2 - 10, "Press ESC key to exit");
 	refresh();
 	nodelay(stdscr, FALSE);
-	getch();
+	while (getch() != KEY_ESC){}
 	return;
 }
 
@@ -143,21 +148,13 @@ char arrowkey_to_heading(const int ch)
 {
 	switch (ch)
 	{
-	case KEY_LEFT:
+	case KEY_LEFT: case 'a':
 		return 'l';
-	case 'a':
-		return 'l';
-	case KEY_RIGHT:
+	case KEY_RIGHT: case 'd':
 		return 'r';
-	case 'd':
-		return 'r';
-	case KEY_UP:
+	case KEY_UP: case 'w':
 		return 'u';
-	case 'w':
-		return 'u';
-	case KEY_DOWN:
-		return 'd';
-	case 's':
+	case KEY_DOWN: case 's':
 		return 'd';
 	default:
 		return '\0';
@@ -224,17 +221,40 @@ bool inside_bounds(const Snake *const snake_p)
 	return (head_x >= GAME_X_MIN && head_x <= GAME_X_MAX && head_y >= GAME_Y_MIN && head_y <= GAME_Y_MAX);
 }
 
-void draw_snake(const Snake *const snake_p, const usint prev_tail_y, const usint prev_tail_x, bool keep_prev_tail, bool initial_draw)
+usint taxicab_distance(const Snake *const snake_p, const Food *const food_p)
+{
+	if (snake_p == NULL || food_p == NULL)
+	{
+		return -1;
+	}
+
+	const Node *const head_p = Snake_GetHeadPtr(snake_p);
+	return abs((int)Node_GetX(head_p) - Food_GetX(food_p))/2 + abs((int)Node_GetY(head_p) - Food_GetY(food_p));
+}
+
+usint euclidean_distance(const Snake *const snake_p, const Food *const food_p)
+{
+	if (snake_p == NULL || food_p == NULL)
+	{
+		return -1;
+	}
+
+	const Node *const head_p = Snake_GetHeadPtr(snake_p);
+	return sqrt(pow(((int)Node_GetX(head_p) - Food_GetX(food_p))/2, 2) + pow((int)Node_GetY(head_p) - Food_GetY(food_p), 2));
+}
+
+
+void draw_snake(const Snake *const snake_p, const char state, const usint prev_tail_y, const usint prev_tail_x, const usint distance, const usint threshold)
 {
 	if (snake_p == NULL)
 	{
 		return;
 	}
 
-	if(initial_draw)
+	if(state == 'i')
 	{
 		const Node *const head_p = Snake_GetHeadPtr(snake_p);
-		mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), SNAKE_HEAD);
+		mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), SNAKE_FACE);
 		for(const Node *curr_p = Node_GetNextNodePtr(head_p); curr_p != NULL; curr_p = Node_GetNextNodePtr(curr_p))
 		{
 			mvaddwstr(Node_GetY(curr_p), Node_GetX(curr_p), SNAKE_BODY);
@@ -243,16 +263,26 @@ void draw_snake(const Snake *const snake_p, const usint prev_tail_y, const usint
 	}
 	else
 	{
-		if(!keep_prev_tail)
-		{
-			mvaddstr(prev_tail_y, prev_tail_x, "  ");
-		}
 		const Node *const head_p = Snake_GetHeadPtr(snake_p);
 		Node *const prev_head_p = Node_GetNextNodePtr(head_p);
-		mvaddwstr(Node_GetY(prev_head_p), Node_GetX(prev_head_p), SNAKE_BODY);
-		mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), SNAKE_HEAD);
+		if (state == 'd')
+		{
+			mvaddwstr(Node_GetY(prev_head_p), Node_GetX(prev_head_p), SNAKE_DEAD);
+		}
+		else
+		{
+			mvaddwstr(Node_GetY(prev_head_p), Node_GetX(prev_head_p), SNAKE_BODY);
+			if(distance == 0)
+			{
+				mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), SNAKE_HAPPY);
+			}
+			else
+			{
+				mvaddstr(prev_tail_y, prev_tail_x, "  ");
+				mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), distance <= threshold ? SNAKE_OPEN_MOUTH : SNAKE_FACE);
+			}
+		}
 	}
-
 	move(0, 0);
 	refresh();
 	return;

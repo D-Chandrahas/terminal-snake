@@ -31,7 +31,11 @@ void sleep_ms(const int milliseconds);
 
 bool inside_bounds(const Snake *const snake_p);
 
-void draw_snake(const Snake *const snake_p, const usint prev_tail_y, const usint prev_tail_x, bool keep_prev_tail, bool initial_draw);
+usint taxicab_distance(const Snake *const snake_p, const Food *const food_p);
+
+usint euclidean_distance(const Snake *const snake_p, const Food *const food_p);
+
+void draw_snake(const Snake *const snake_p, const char state, const usint prev_tail_y, const usint prev_tail_x, const usint distance, const usint threshold);
 
 void draw_food(const Food *const food_p);
 

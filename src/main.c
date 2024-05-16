@@ -7,6 +7,8 @@
 
 #define SNAKE_INIT_LEN 4
 #define DEFAULT_SPEED 5
+#define FOOD_PROXIMITY_THRESHOLD 6
+#define DISTANCE_FUNCTION euclidean_distance /*(or) taxicab_distance*/
 
 int main()
 {
@@ -20,7 +22,7 @@ int main()
 	Snake *snake_p = New_Snake();
 	Snake_Init(snake_p, (LINES/2) + (LINES/2)%2 - 1, (COLS/2) + (COLS/2)%2 - 1, 'r');
 	feed_snake(snake_p, SNAKE_INIT_LEN - 1);
-	draw_snake(snake_p, -1, -1, false, true);
+	draw_snake(snake_p, 'i', 0, 0, 1, 0);
 
 	int ch = 0;
 	usint prev_TailX = -1, prev_TailY = -1;
@@ -33,7 +35,7 @@ int main()
 		{
 			nodelay(stdscr, false);
 			display_at_top("SPEED", speed);
-			while ((ch = getch()) != KEY_ESC)
+			while ((ch = getch()) != '\n')
 			{
 				if(ch == '[' || ch == ']')
 				{
@@ -67,12 +69,14 @@ int main()
 				ate_food = true;
 				Snake_Append(snake_p, prev_TailY, prev_TailX);
 				display_at_top("SCORE", ++score);
-				spawn_food(&food, snake_p);
 			}
-			draw_snake(snake_p, prev_TailY, prev_TailX, ate_food, false);
+			draw_snake(snake_p, 'n', prev_TailY, prev_TailX, DISTANCE_FUNCTION(snake_p, &food), FOOD_PROXIMITY_THRESHOLD);
+			if (ate_food){spawn_food(&food, snake_p);}
 		}
 		else
 		{
+			draw_snake(snake_p, 'd', 0, 0, 1, 0);
+			// sleep_ms(1000);
 			game_over_screen(score);
 			break;
 		}
