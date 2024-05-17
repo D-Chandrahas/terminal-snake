@@ -7,17 +7,15 @@
 
 #define SNAKE_INIT_LEN 4
 #define DEFAULT_SPEED 5
-#define FOOD_PROXIMITY_THRESHOLD 6
+#define FOOD_PROXIMITY_THRESHOLD 4
 #define DISTANCE_FUNCTION euclidean_distance /*(or) taxicab_distance*/
 
 int main()
 {
-	usint speed = DEFAULT_SPEED;
+	usint speed = DEFAULT_SPEED, score = 0;
 	init_game();
 	game_start_screen();
 
-	usint score = 0;
-	display_at_top("SCORE", score);
 
 	Snake *snake_p = New_Snake();
 	Snake_Init(snake_p, (LINES/2) + (LINES/2)%2 - 1, (COLS/2) + (COLS/2)%2 - 1, 'r');

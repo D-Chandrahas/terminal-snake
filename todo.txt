@@ -31,15 +31,17 @@ random snake initial spawn
 // align food and snake
 better borders
 // better random food spawn algo.
-change snake head based on direction? - depends on snake head shape/emoji
+// change snake head based on direction? - depends on snake head shape/emoji
 // initial size 4
 // game start screen with help
 // score display
 // change eye emoji to mouth when near food
 xbox controller support on windows using xinput
 // variable speed
+// keep happy face for few ticks after eating food
+// clear input buffer every tick? - bad game experience
 
-better ingame help
+// better ingame help
 readme
 
 recheck prev commit

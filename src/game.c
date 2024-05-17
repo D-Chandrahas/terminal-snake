@@ -14,6 +14,8 @@
 #define SNAKE_HAPPY L"😋" //L"\ud83d\ude0b"
 #define SNAKE_DEAD L"☠️" //L"\u2620\ufe0f"
 
+#define HAPPY_TIME 3
+
 usint GAME_X_MIN, GAME_X_MAX, GAME_Y_MIN, GAME_Y_MAX;
 usint GAME_LEFT_BORDER, GAME_RIGHT_BORDER, GAME_TOP_BORDER, GAME_BOTTOM_BORDER;
 
@@ -88,22 +90,27 @@ void init_game(void)
 	init_window();
 	set_game_area_limits();
 	draw_borders();
+	display_at_top("SCORE", 0);
 	srand(time(NULL));
 	return;
 }
 
 void game_start_screen(void)
 {
-	mvaddstr(LINES / 2 - 1, COLS / 2 - 10, "Use Arrows or WASD to turn");
-	mvaddstr(LINES / 2, COLS / 2 - 20, "Press '[' or ']' to increase/decrease speed");
-	mvaddstr(LINES / 2 + 1, COLS / 2 - 10, "Press any key to start");
+	mvaddstr(LINES / 2 - 3, COLS / 2 - 10, "Use Arrows or WASD to turn");
+	mvaddstr(LINES / 2 - 1, COLS / 2 - 20, "Press '[' or ']' to increase/decrease speed");
+	mvaddstr(LINES / 2, COLS / 2 - 10, "and enter to confirm");
+	mvaddstr(LINES / 2 + 2, COLS / 2 - 20, "Current score/speed at the top left corner");
+	mvaddstr(LINES / 2 + 3, COLS / 2 - 10, "Press any key to start...");
 	refresh();
 	nodelay(stdscr, FALSE);
 	getch();
 	nodelay(stdscr, TRUE);
-	mvaddstr(LINES / 2 - 1, COLS / 2 - 10, "                          ");
-	mvaddstr(LINES / 2, COLS / 2 - 20, "                                           ");
-	mvaddstr(LINES / 2 + 1, COLS / 2 - 10, "                      ");
+	mvaddstr(LINES / 2 - 3, COLS / 2 - 10, "                          ");
+	mvaddstr(LINES / 2 - 1, COLS / 2 - 20, "                                           ");
+	mvaddstr(LINES / 2, COLS / 2 - 10, "                    ");
+	mvaddstr(LINES / 2 + 2, COLS / 2 - 20, "                                          ");
+	mvaddstr(LINES / 2 + 3, COLS / 2 - 10, "                         ");
 	move(0, 0);
 	refresh();
 	return;
@@ -246,6 +253,7 @@ usint euclidean_distance(const Snake *const snake_p, const Food *const food_p)
 
 void draw_snake(const Snake *const snake_p, const char state, const usint prev_tail_y, const usint prev_tail_x, const usint distance, const usint threshold)
 {
+	static char happy_timer = 0;
 	if (snake_p == NULL)
 	{
 		return;
@@ -275,11 +283,20 @@ void draw_snake(const Snake *const snake_p, const char state, const usint prev_t
 			if(distance == 0)
 			{
 				mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), SNAKE_HAPPY);
+				happy_timer = HAPPY_TIME;
 			}
 			else
 			{
 				mvaddstr(prev_tail_y, prev_tail_x, "  ");
-				mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), distance <= threshold ? SNAKE_OPEN_MOUTH : SNAKE_FACE);
+				if(happy_timer > 0)
+				{
+					mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), SNAKE_HAPPY);
+					--happy_timer;
+				}
+				else
+				{
+					mvaddwstr(Node_GetY(head_p), Node_GetX(head_p), distance <= threshold ? SNAKE_OPEN_MOUTH : SNAKE_FACE);
+				}
 			}
 		}
 	}
