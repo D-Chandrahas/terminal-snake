@@ -42,4 +42,4 @@ xbox controller support on windows using xinput
 // clear input buffer every tick? - bad game experience
 
 // better ingame help
-readme
+// readme
