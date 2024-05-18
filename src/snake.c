@@ -87,7 +87,8 @@ void Snake_SetLength(Snake *const snake_p, const usint len)
 
 void Snake_IncrementLength(Snake *const snake_p)
 {
-	return Snake_SetLength(snake_p, Snake_GetLength(snake_p) + 1);
+	Snake_SetLength(snake_p, Snake_GetLength(snake_p) + 1);
+	return;
 }
 
 char Snake_GetHeading(const Snake *const snake_p)

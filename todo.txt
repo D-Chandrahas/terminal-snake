@@ -43,5 +43,3 @@ xbox controller support on windows using xinput
 
 // better ingame help
 readme
-
-recheck prev commit
