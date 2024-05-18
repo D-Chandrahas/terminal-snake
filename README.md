@@ -1,4 +1,4 @@
-# Build instructions for windows 10
+# Build instructions for Windows 10
 - Make sure you have `MinGW-w64` on your system.
 - Make sure also have `ncursesw` libraries and `pkg-config` installed.
 - Make sure your `PATH` environment variable is set correctly. (to use `gcc` and other tools)
@@ -17,10 +17,17 @@
 - Only tested on windows terminal.
 - You may need to enable UTF-8 support. Settings->Time & Language->Language->Administrative language settings->Change system locale->Tick the checkbox.
 
-# Usage
-    ./bin/snake.exe
+# Build instructions for Ubuntu 23.10
+- `sudo apt update`
+- `sudo apt install libncursesw6 pkg-config`
+- `git clone https://github.com/D-Chandrahas/terminal-snake.git`
+- `cd terminal-snake/`
+- `gcc -w -O3 ./src/*.c -o ./bin/snake -I./include $(pkg-config ncursesw --cflags --libs)`
 
-# Instructions
+### Usage
+    ./bin/snake
+
+# How to play
 - Use `arrow keys` or `W`/`A`/`S`/`D` to turn the snake in the respective direction.
 - Increase score by leading the snake to the food.
     - The score is displayed at the top left corner.
@@ -31,5 +38,17 @@
         - Press `enter` to confirm the new speed and resume the game.
 
 # Screenshots
+![img1](./assets/img1.png)
+![img2](./assets/img2.png)
 
 # Further details
+- The emoji used for the snake's head changes based on its state.
+    - Normally it is 👀.
+    - When the snake is within certain distance of 🍰, it changes to 👄.
+    - If the snake has just eaten 🍰, it changes to 😋 for a few ticks.
+    - If the snake collides with a wall or itself, it changes to ☠️.
+
+## Bugs
+- Sometimes, the food becomes invisible.
+    - However, it is a very rare bug and i cannot reproduce it on demand.
+    - Hence, i am unable to fix it.
