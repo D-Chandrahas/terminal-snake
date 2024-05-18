@@ -47,8 +47,3 @@
     - When the snake is within certain distance of 🍰, it changes to 👄.
     - If the snake has just eaten 🍰, it changes to 😋 for a few ticks.
     - If the snake collides with a wall or itself, it changes to ☠️.
-
-## Bugs
-- Sometimes, the food becomes invisible.
-    - However, it is a very rare bug and i cannot reproduce it on demand.
-    - Hence, i am unable to fix it.

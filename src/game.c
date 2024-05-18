@@ -359,7 +359,7 @@ void spawn_food(Food *const food_p, const Snake *const snake_p)
 	
 	while(is_occupied_by_snake(snake_p, y, x))
 	{
-		if(++x > GAME_X_MAX)
+		if( (x+=2) > GAME_X_MAX)
 		{
 			x = GAME_X_MIN;
 			if(++y > GAME_Y_MAX)
